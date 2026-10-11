@@ -9824,7 +9824,7 @@ PROMPT;
         } else {
             $lang = substr($lang, 0, 2);
         }
-        return in_array($lang, ['it', 'en', 'de', 'fr', 'es', 'zh'], true) ? $lang : 'en';
+        return in_array($lang, ['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'], true) ? $lang : 'en';
     }
 
     function recipeLangName(string $lang): string {
@@ -9835,6 +9835,7 @@ PROMPT;
             'fr' => 'French',
             'es' => 'Spanish',
             'zh' => 'Simplified Chinese',
+            'pl' => 'Polish',
         ][$lang] ?? 'English';
     }
 
@@ -10109,6 +10110,51 @@ PROMPT;
                 'prompt_coerenza' => '步骤↔食材一致性：`steps` 中提到的每种食材必须出现在 `ingredients` 中，或者是水/盐/胡椒/油或少量香草。禁止在步骤中写黄油/奶油/鸡蛋/牛奶/酸奶/奶酪等，如果该产品不在储藏室中。',
                 'prompt_user_prefs' => '用户偏好：',
                 'prompt_respond_json' => '仅回复有效 JSON（无 markdown）：',
+            ],
+            'pl' => [
+                'status_analyze_pantry' => '📦 Analizuję zapasy w spiżarni…',
+                'status_products_found' => 'Znaleziono produktów: {n}',
+                'status_passed_ai' => ' (przekazano do AI: {n})',
+                'status_all_passed_ai' => ' — wszystkie produkty przekazano do AI',
+                'status_urgent' => '⚠️ Pilne produkty ({n}): {items}',
+                'status_evaluate_ingredients' => '🧠 Sprawdzam dostępne składniki…',
+                'status_preparing_recipe' => '👨‍🍳 Przygotowuję przepis…',
+                'status_recipe_with' => '🥘 Przepis z {a} i {b}',
+                'status_variant' => ' — wariant nr {n}',
+                'status_dish_based_on' => '🎯 Danie na bazie: {type}',
+                'status_creating_full_recipe' => '✍️ Tworzę pełny przepis…',
+                'status_quota_wait' => '⏳ Wyczerpano limit TPM ({model}), czekam {s}s… (próba {a}/{m})',
+                'status_retry_generation' => '✍️ Ponawiam generowanie…',
+                'status_switch_model' => '🔄 Przełączam model na {model}…',
+                'status_mealie_search' => '📚 Szukam przepisów w Mealie…',
+                'status_mealie_found' => '✅ Znaleziono przepis w Mealie',
+                'error_pantry_empty' => 'Spiżarnia jest pusta!',
+                'error_gemini_api' => 'Błąd API Gemini',
+                'error_cannot_generate' => 'Nie udało się wygenerować przepisu',
+                'error_empty_reply' => 'Gemini zwrócił pustą odpowiedź',
+                'prompt_lang_rule' => 'WAŻNE: wszystkie tekstowe pola przepisu zapisuj wyłącznie po polsku.',
+                'prompt_step_example' => 'Krok 1…',
+                'tools_title' => 'Potrzebne narzędzia',
+                'prompt_option_veloce' => 'SZYBKI: maksymalnie 15–20 minut łącznie.',
+                'prompt_option_pocafame' => 'MAŁY APETYT: lekka porcja, przekąska lub sałatka.',
+                'prompt_option_scadenze' => 'PRIORYTET: PRODUKTY Z KRÓTKIM TERMINEM WAŻNOŚCI — najpierw wykorzystaj produkty, których termin wkrótce upływa.',
+                'prompt_option_salutare' => 'ZDROWO: używaj produktów pełnoziarnistych i warzyw, ogranicz tłuszcz.',
+                'prompt_option_opened' => 'OTWARTE PRODUKTY: najpierw wykorzystaj produkty oznaczone [OTWARTE].',
+                'prompt_option_zerowaste' => 'ZERO MARNOWANIA: wykorzystaj jak najwięcej składników, których termin ważności wkrótce upływa.',
+                'prompt_option_fuel' => 'MÓJ RYTM (Fuel Mode): utwórz przepis na podstawie danych biometrycznych (profilu), CELU (utrzymanie masy ciała/redukcja/przyrost) i dzisiejszej aktywności fizycznej. Dostosuj kalorie i makroskładniki do podanego niżej BUDŻETU POSIŁKU.',
+                'prompt_preferences_header' => '⚠️ OBOWIĄZKOWE PREFERENCJE (ZAWSZE ich przestrzegaj — to wymagania, nie sugestie):',
+                'prompt_no_match' => 'Nie znaleziono składnika idealnie pasującego do przepisu — użyj najbardziej zbliżonego dostępnego i zaznacz to w polu nutrition_note.',
+                'prompt_match_header' => 'Dostępne w spiżarni składniki pasujące do tego typu dania (użyj co najmniej jednego jako PODSTAWY przepisu):',
+                'prompt_required_type' => '🎯 WYMAGANY TYP DANIA:',
+                'prompt_required_type_rule' => 'Przepis MUSI spełniać warunek: {hint}. Jako podstawy użyj pasujących składników.',
+                'prompt_done_today' => 'JUŻ PRZYGOTOWANO DZISIAJ: {list} — zaproponuj coś INNEGO.',
+                'prompt_last_7d' => 'OSTATNIE 7 DNI: {list} — zadbaj o różnorodność.',
+                'prompt_regen' => '🔁 GENEROWANIE OD NOWA #{n}: zaproponuj coś CAŁKOWICIE INNEGO (inny styl, główny składnik i technika).',
+                'prompt_regen_avoid' => 'Nie używaj jako głównego składnika: {list}.',
+                'prompt_frozen_rule' => 'Składniki oznaczone [❄️ MROŻONE] są zamrożone. W krokach przepisu dokładnie opisz, jak ich użyć (mrożone warzywa i gotowe dania wkładaj bez rozmrażania bezpośrednio do gorącego garnka lub na patelnię; duże kawałki mięsa i ryby w razie potrzeby rozmrażaj w lodówce). Dodaj 2–5 minut gotowania w porównaniu ze świeżymi składnikami. NIE traktuj ich jak świeżych produktów z lodówki.',
+                'prompt_coerenza' => 'ZGODNOŚĆ KROKÓW ZE SKŁADNIKAMI: każdy produkt spożywczy wymieniony w `steps` MUSI znajdować się w `ingredients`, chyba że jest to woda, sól, pieprz, olej albo szczypta ziół. NIE WOLNO wymieniać w krokach masła, śmietany, jajek, mleka, jogurtu, sera itp., jeśli danego produktu nie ma w spiżarni i na liście `ingredients`. Jeśli potrzebujesz masła, którego nie ma w spiżarni, zmień technikę (np. użyj oleju) albo wybierz inny przepis.',
+                'prompt_user_prefs' => 'PREFERENCJE UŻYTKOWNIKA:',
+                'prompt_respond_json' => 'Odpowiedz WYŁĄCZNIE poprawnym JSON-em (bez markdown):',
             ],
         ];
         $text = $dict[$lang][$key] ?? $dict['en'][$key] ?? $dict['it'][$key] ?? $key;
@@ -17665,8 +17711,22 @@ function bringSuggestItems(PDO $db): void {
             11 => '十一月：柿子、石榴、卷心菜、西兰花和晚季菊苣。',
             12 => '十二月：橙子、柑橘、柿子、卷心菜和花椰菜。',
         ],
+        'pl' => [
+            1  => 'Styczeń: sezon na pomarańcze, mandarynki, kiwi, karczochy i kapustę włoską.',
+            2  => 'Luty: warto sięgnąć po radicchio, koper włoski, gruszki i owoce cytrusowe.',
+            3  => 'Marzec: zaczyna się sezon na szparagi! Pasują też świeży groszek i szpinak.',
+            4  => 'Kwiecień: sezon na szparagi, karczochy, bób i truskawki.',
+            5  => 'Maj: cukinia, truskawki i czereśnie — świetny miesiąc na świeże warzywa i owoce.',
+            6  => 'Czerwiec: morele, brzoskwinie, świeże pomidory i bakłażany — nadchodzi lato.',
+            7  => 'Lipiec: arbuz, brzoskwinie, bakłażany i pomidory są teraz najlepsze.',
+            8  => 'Sierpień: sezon na śliwki, figi, paprykę i świeżą bazylię.',
+            9  => 'Wrzesień: winogrona, figi, borowiki, granaty i jeżyny.',
+            10 => 'Październik: granaty, kasztany, grzyby, jabłka i jesienne gruszki.',
+            11 => 'Listopad: persymony, granaty, kapusta, brokuły i późne odmiany radicchio.',
+            12 => 'Grudzień: pomarańcze, mandarynki, persymony, kapusta włoska i kalafiory.',
+        ],
     ];
-    $tipLang = in_array($lang, ['it', 'en', 'de', 'fr', 'es', 'zh'], true) ? $lang : 'en';
+    $tipLang = in_array($lang, ['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'], true) ? $lang : 'en';
     $monthTips = $monthTipsAll[$tipLang];
     $seasonalTip = $monthTips[(int)date('n')] ?? '';
 
@@ -17695,13 +17755,14 @@ function bringSuggestItems(PDO $db): void {
                 'fr' => [1=>'Janvier',2=>'Février',3=>'Mars',4=>'Avril',5=>'Mai',6=>'Juin',7=>'Juillet',8=>'Août',9=>'Septembre',10=>'Octobre',11=>'Novembre',12=>'Décembre'],
                 'es' => [1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',9=>'Septiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre'],
                 'zh' => [1=>'一月',2=>'二月',3=>'三月',4=>'四月',5=>'五月',6=>'六月',7=>'七月',8=>'八月',9=>'九月',10=>'十月',11=>'十一月',12=>'十二月'],
+                'pl' => [1=>'stycznia',2=>'lutego',3=>'marca',4=>'kwietnia',5=>'maja',6=>'czerwca',7=>'lipca',8=>'sierpnia',9=>'września',10=>'października',11=>'listopada',12=>'grudnia'],
             ];
             $monthName = ($monthNames[$tipLang] ?? $monthNames['en'])[(int)date('n')];
             $inStockJson  = json_encode(array_values(array_slice($inStockNames, 0, 40)), JSON_UNESCAPED_UNICODE);
             $alreadyJson  = json_encode(array_values($knownNames), JSON_UNESCAPED_UNICODE);
             $dietaryLine  = $dietary ? "- Dietary preferences: {$dietary}" : '';
 
-            $langAdj = ['it'=>'Italian','en'=>'English','de'=>'German','fr'=>'French','es'=>'Spanish','zh'=>'Chinese'][$tipLang] ?? 'English';
+            $langAdj = ['it'=>'Italian','en'=>'English','de'=>'German','fr'=>'French','es'=>'Spanish','zh'=>'Chinese','pl'=>'Polish'][$tipLang] ?? 'English';
             $prompt = "You are a helpful {$langAdj} household shopping assistant.\n"
                 . "Today is {$monthName} " . date('Y') . ".\n"
                 . "The user already has these products in stock: {$inStockJson}\n"
@@ -17713,12 +17774,12 @@ function bringSuggestItems(PDO $db): void {
                 . "  b) Complementary staples that pair well with what the user has\n"
                 . "  c) Anything commonly forgotten but regularly needed\n"
                 . "Do NOT suggest products already in stock or already in the shopping list.\n"
-                . "Also write one short seasonal tip (max 15 words) in Italian.\n"
+                . "Also write one short seasonal tip (max 15 words) in {$langAdj}.\n"
                 . "\nReply ONLY with valid JSON in this exact format (no markdown):\n"
                 . "{\"seasonal_tip\":\"...\",\"suggestions\":[{\"name\":\"...\",\"reason\":\"...\",\"category\":\"...\",\"priority\":\"bassa\"}]}\n"
                 . "Category must be one of: frutta,verdura,latticini,carne,pesce,pane,cereali,condimenti,bevande,surgelati,altro\n"
                 . "Priority must be: bassa\n"
-                . "Name and reason must be in Italian. Reason max 8 words.";
+                . "Name and reason must be in {$langAdj}. Reason max 8 words.";
 
             $payload   = ['contents' => [['parts' => [['text' => $prompt]]]]];
             $gemResult = callGeminiWithFallback($apiKey, $payload, 20, 'bring_suggest');
@@ -19262,7 +19323,7 @@ function geminiProductHint(): void {
         return;
     }
 
-    $langLabel = match($lang) { 'en' => 'English', 'de' => 'German', default => 'Italian' };
+    $langLabel = match($lang) { 'en' => 'English', 'de' => 'German', 'pl' => 'Polish', default => 'Italian' };
     $prompt = "You are a food safety expert. For the food product named \"{$name}\" (category: {$category}), "
         . "answer in {$langLabel} with a strict JSON object and NOTHING else:\n"
         . "{\n"
@@ -19355,7 +19416,7 @@ function geminiShoppingEnrich(PDO $db): void {
         return;
     }
 
-    $langLabel  = match($lang) { 'en' => 'English', 'de' => 'German', default => 'Italian' };
+    $langLabel  = match($lang) { 'en' => 'English', 'de' => 'German', 'pl' => 'Polish', default => 'Italian' };
     $itemsJson  = json_encode(array_map(fn($i) => [
         'name'     => $i['name'],
         'reason'   => $i['reason'] ?? '',
@@ -19577,7 +19638,7 @@ function geminiAnomalyExplain(): void {
         return;
     }
 
-    $langLabel = match($lang) { 'en' => 'English', 'de' => 'German', default => 'Italian' };
+    $langLabel = match($lang) { 'en' => 'English', 'de' => 'German', 'pl' => 'Polish', default => 'Italian' };
 
     $directionDesc = match($direction) {
         'phantom'   => "The inventory shows {$invQty} {$unit} but transaction history predicts only {$expQty} {$unit} (excess of " . abs($diff) . " {$unit}).",

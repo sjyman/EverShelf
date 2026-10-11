@@ -19,7 +19,7 @@
  *     by a data-i18n element with a value starting with that same emoji.
  *
  * It also asserts that the copy the dashboard needs to explain itself exists in all
- * six locales: the verdict format, the expiry date line, the "you still have X" line
+ * seven locales: the verdict format, the expiry date line, the "you still have X" line
  * and the fuel-badge target line. A missing key would surface as a raw key name.
  *
  * Run: php scripts/test-i18n-icons.php
@@ -54,7 +54,7 @@ function flatten(array $node, string $prefix = ''): array
     return $out;
 }
 
-$locales = ['it', 'en', 'de', 'fr', 'es', 'zh'];
+$locales = ['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'];
 $strings = [];
 foreach ($locales as $loc) {
     $raw = (string)file_get_contents($root . '/translations/' . $loc . '.json');

@@ -13,7 +13,7 @@
  *
  * A registry entry is only useful while
  *   * its tab exists (otherwise "Configure" jumps nowhere),
- *   * its title/hint keys exist in all six locales (otherwise the row shows a key),
+ *   * its title/hint keys exist in all seven locales (otherwise the row shows a key),
  *   * an `ask` entry names a wizard step that exists in _setupSteps(),
  *   * the wizard has no hardcoded last-step index (the step list grew).
  *
@@ -63,7 +63,7 @@ $root   = __DIR__ . '/..';
 $html   = (string)file_get_contents($root . '/index.html');
 $appJs  = (string)file_get_contents($root . '/assets/js/app.js');
 $api    = (string)file_get_contents($root . '/api/index.php');
-$locales = ['it', 'en', 'de', 'fr', 'es', 'zh'];
+$locales = ['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'];
 $json = [];
 foreach ($locales as $loc) {
     $json[$loc] = json_decode((string)file_get_contents($root . "/translations/{$loc}.json"), true);

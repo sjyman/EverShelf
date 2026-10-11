@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent / 'translations'
 REF = 'it.json'
-LOCALES = ['it.json', 'en.json', 'de.json', 'fr.json', 'es.json', 'zh.json']
+LOCALES = ['it.json', 'en.json', 'de.json', 'fr.json', 'es.json', 'zh.json', 'pl.json']
 
 # New keys added across all locales (nested path -> value per locale)
 NEW_KEYS: dict[str, dict[str, str]] = {
@@ -329,9 +329,12 @@ def main() -> None:
                 set_nested(data, key, val)
                 flat[key] = val
 
-        # Inject new keys
+        # Inject curated values. Preserve a locale's existing text when no
+        # curated translation is listed for it (notably Polish).
         for key, per_lang in NEW_KEYS.items():
-            set_nested(data, key, per_lang[lang if lang in per_lang else 'en'])
+            if lang not in per_lang and key in flat:
+                continue
+            set_nested(data, key, per_lang.get(lang, en_flat.get(key, ref_flat.get(key, ''))))
 
         path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
         print(f'Updated {fname}')

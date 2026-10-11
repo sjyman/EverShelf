@@ -35,7 +35,7 @@ api/index.php   → switch($action) → handler fn → SQLite (data/evershelf.db
 ## Golden rules (conventions already in the codebase)
 
 - **Language**: code, comments and docs are **English**. UI strings live in
-  `translations/*.json` (IT/EN/DE/FR/ES/ZH) and are used via `t('key')` in JS /
+  `translations/*.json` (IT/EN/DE/FR/ES/ZH/PL) and are used via `t('key')` in JS /
   `data-i18n="key"` in HTML. Never hardcode a user-facing string.
 - **Errors**: never emit HTML before JSON. `api/bootstrap.php` disables
   `display_errors`. Return `{"success":false,"error":"..."}`; wrap handlers in the
@@ -119,7 +119,7 @@ api/index.php   → switch($action) → handler fn → SQLite (data/evershelf.db
   and add a `CHANGELOG.md` entry. `auto-merge-to-main` + `create-release` read the
   version from `index.html`.
 - **i18n**: never hardcode user-facing strings. Use `t('key')` (JS) /
-  `data-i18n*` (HTML) and add the key to **all** locales (it/en/de/fr/es/zh).
+  `data-i18n*` (HTML) and add the key to **all** locales (it/en/de/fr/es/zh/pl).
   `scripts/i18n-audit.py` (run in CI) fails on used-but-missing keys; give `tl()`
   fallbacks in English. Optional UI strings from PHP should return a `hint_key`
   (+ `hint_args`), not a literal — and so should a whole payload (`tip_key`,
@@ -128,7 +128,7 @@ api/index.php   → switch($action) → handler fn → SQLite (data/evershelf.db
   `tr(key, fallback)` in `_localizeSmartReason`) or emitted **only** by PHP is
   invisible to it: write the resolution as a bare `t('key')` *and* lock the set
   with a PHP test — `scripts/test-seasonal-match.php` asserts every
-  `shopping.seasonal_tip_*` key PHP can return exists in all six locales.
+  `shopping.seasonal_tip_*` key PHP can return exists in all seven locales.
 - **Secrets**: never commit keystores, `.env`, or signing passwords. Android
   builds read `keystore.properties`/env; CI reads GitHub Secrets (see `SECURITY.md`).
 - **Commits**: Conventional-ish prefixes seen in history: `feat:`, `fix:`,

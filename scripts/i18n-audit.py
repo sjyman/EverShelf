@@ -31,7 +31,7 @@ SRC_HTML = [ROOT / 'index.html']
 # PHP answers are rendered server-side (the ICS expiry feed, future notifications)
 # and use evershelfTr('key', $lang) — those keys are used, just not in JS.
 SRC_PHP = [ROOT / 'api/index.php', *sorted((ROOT / 'api/lib').glob('*.php'))]
-LOCALES = ['it', 'en', 'de', 'fr', 'es', 'zh']
+LOCALES = ['it', 'en', 'de', 'fr', 'es', 'zh', 'pl']
 
 # Attributes a user can read, mapped to the data-i18n* attribute that
 # translatePage() applies at runtime (assets/js/app.js).

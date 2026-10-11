@@ -12,7 +12,7 @@
  *   index.html                 the drawn rail (`data-stage` + its i18n label)
  *   _PRELOADER_STAGE_KEYS      stage → label key, used at runtime
  *   _PRELOADER_STAGE_OF_CHECK  every health_check key owned by a stage
- *   translations/*.json        all six locales carry every label
+ *   translations/*.json        all seven locales carry every label
  * A check nobody owns would leave its icon blinking forever; a stage without a
  * locale string would print its raw `startup.stage_*` key instead.
  *
@@ -213,8 +213,8 @@ $bump = (string)file_get_contents($root . '/scripts/bump-version.sh');
 assert_true(preg_match('/s\/\(preloader-version\\\\">v\)\[0-9\]\+/', $bump) === 1,
     'bump-version.sh and the markup still agree on the splash badge');
 
-// ── [7] every label exists in all six locales ───────────────────────────────
-$locales = ['it', 'en', 'de', 'fr', 'es', 'zh'];
+// ── [7] every label exists in all seven locales ───────────────────────────────
+$locales = ['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'];
 $needed  = array_values($mapped);
 $needed[] = 'startup.version';
 foreach ($locales as $loc) {

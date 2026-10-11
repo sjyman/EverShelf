@@ -225,7 +225,7 @@ assert_true($formatQtyPlainFn !== null && preg_match('/replace\(\/<\[\^>\]/', (s
 assert_true(js_function_body($code, $functions, 'stripHtml') !== null, 'stripHtml() exists');
 
 // ── [5] the sentences that interpolate the quantity keep {name} and {qty} ──
-$locales = ['it', 'en', 'de', 'fr', 'es', 'zh'];
+$locales = ['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'];
 $strings = [];
 foreach ($locales as $loc) {
     $decoded = json_decode((string)file_get_contents($root . '/translations/' . $loc . '.json'), true);

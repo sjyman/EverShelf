@@ -9,7 +9,7 @@
  * shopping list). Splitting the strip in sections only works while
  *   * every tab declares a `data-group` that app.js knows (SETTINGS_GROUPS),
  *   * every tab has a panel to open, every panel a tab to reach it,
- *   * each section's label key exists in all six locales,
+ *   * each section's label key exists in all seven locales,
  *   * the page opens on a tab that belongs to the section highlighted as active.
  * A tab left behind in another section is invisible (display:none) but still
  * clickable by the keyboard, so a mismatch makes a settings card unreachable
@@ -98,10 +98,10 @@ assert_same(count(array_unique($panels)), count($panels), 'no duplicate settings
 
 // ── The page must open on a tab of the highlighted section ──────────────────
 
-// ── i18n: every section label exists in all six locales ─────────────────────
+// ── i18n: every section label exists in all seven locales ───────────────────
 $labels = array_values($groupButtons);
 $labels[] = 'settings.groups_aria';
-foreach (['it', 'en', 'de', 'fr', 'es', 'zh'] as $loc) {
+foreach (['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'] as $loc) {
     $json = json_decode((string)file_get_contents($root . "/translations/{$loc}.json"), true);
     $missing = [];
     foreach ($labels as $key) {
@@ -191,7 +191,7 @@ if (preg_match('/\.settings-tabs \{(.*?)\}/s', $css, $mTabs)) {
 assert_true(str_contains($tabsBlock, 'flex-wrap: wrap'), 'the sub-section list wraps instead of scrolling');
 assert_true(!str_contains($tabsBlock, 'overflow-x: auto'), 'the sub-section list never scrolls sideways');
 assert_true(str_contains($tabsBlock, 'border-left'), 'the sub-sections are visually nested under their section');
-foreach (['it', 'en', 'de', 'fr', 'es', 'zh'] as $loc) {
+foreach (['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'] as $loc) {
     $json = json_decode((string)file_get_contents($root . "/translations/{$loc}.json"), true);
     $label = $json['settings']['subsections_label'] ?? null;
     assert_true(is_string($label) && trim($label) !== '', "translations/{$loc}.json has settings.subsections_label");

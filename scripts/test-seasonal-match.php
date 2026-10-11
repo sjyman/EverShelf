@@ -178,14 +178,14 @@ assert_same($hideable, array_values(array_intersect($cardFlagged, $hideable)),
     'the card flags every catalogue entry the list would hide in month ' . $cardMonth);
 assert_same('shopping.seasonal_tip_' . $cardMonth, $card['tip_key'], 'the card returns a stable i18n tip key');
 
-// ── Every tip key the API can emit exists in all six locales ────────────────
+// ── Every tip key the API can emit exists in all seven locales ────────────────
 // The i18n audit only sees keys used in JS; keys returned by PHP are covered here.
 $localeKeys = ['shopping.seasonal_out_note'];
 for ($m = 1; $m <= 12; $m++) {
     $localeKeys[] = 'shopping.seasonal_tip_' . $m;
 }
 $missingKeys = [];
-foreach (['it', 'en', 'de', 'fr', 'es', 'zh'] as $locale) {
+foreach (['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'] as $locale) {
     $raw = @file_get_contents(__DIR__ . '/../translations/' . $locale . '.json');
     $data = $raw === false ? [] : (json_decode($raw, true) ?: []);
     foreach ($localeKeys as $key) {
@@ -199,7 +199,7 @@ foreach (['it', 'en', 'de', 'fr', 'es', 'zh'] as $locale) {
     }
 }
 assert_true($missingKeys === [],
-    'every monthly tip key and the note exist in all six locales'
+    'every monthly tip key and the note exist in all seven locales'
     . ($missingKeys ? ' (missing ' . implode(', ', array_slice($missingKeys, 0, 5)) . ')' : ''));
 
 echo $fail === 0 ? "\nAll seasonal match tests passed.\n" : "\n{$fail} test(s) failed.\n";

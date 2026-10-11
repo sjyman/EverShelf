@@ -3,7 +3,7 @@
  * EverShelf — AI prompt fragments that depend on the UI language.
  *
  * The photo-identification prompt (action `gemini_identify`) used to be a
- * hardcoded Italian string, so an English — or German, French, Spanish, Chinese —
+ * hardcoded Italian string, so an English — or German, French, Spanish, Chinese, Polish —
  * user got Italian product names, descriptions and confidence labels back, even
  * though the client always knew which language the UI was in (issue #260).
  *
@@ -19,7 +19,7 @@
  * mapToLocalCategory() in assets/js/app.js matches them against CATEGORY_ICONS
  * keys, so they must never be translated — only the sentence around them is.
  *
- * @param string $lang One of it|en|de|fr|es|zh (see recipeNormalizeLang()).
+ * @param string $lang One of it|en|de|fr|es|zh|pl (see recipeNormalizeLang()).
  * @return array<string,string> intro, lang_rule, json_rule, name, brand,
  *                              category, search_terms, confidence, description.
  *                              Unknown locales fall back to the English set.
@@ -93,6 +93,17 @@ function evershelfIdentifyPromptFragments(string $lang): array {
             'search_terms' => '用于在数据库中查找该产品的搜索词（例如：greek yogurt fage, barilla spaghetti pasta）',
             'confidence'   => '高/中/低',
             'description'  => '对所识别产品的简短描述',
+        ],
+        'pl' => [
+            'intro'        => 'Przeanalizuj to zdjęcie produktu spożywczego lub artykułu gospodarstwa domowego. Zidentyfikuj produkt jak najdokładniej.',
+            'lang_rule'    => 'WAŻNE: nazwę, opis i poziom pewności podaj po polsku.',
+            'json_rule'    => 'Zwróć WYŁĄCZNIE poprawny JSON (bez markdown i backticków):',
+            'name'         => 'Nazwa produktu, możliwie szczegółowa (np. Jogurt grecki naturalny)',
+            'brand'        => 'Widoczna marka (np. Fage, Müller) lub pusty ciąg',
+            'category'     => "Klucz kategorii: użyj DOKŁADNIE jednego z tokenów bez tłumaczenia — {$categories}",
+            'search_terms' => 'Hasła wyszukiwania do znalezienia produktu w bazie danych (np. greek yogurt fage, barilla spaghetti pasta)',
+            'confidence'   => 'wysoka/średnia/niska',
+            'description'  => 'Krótki opis rozpoznanego produktu',
         ],
     ];
 

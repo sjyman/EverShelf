@@ -191,7 +191,7 @@ and the assistant pick it up automatically, and raising `askVersion` asks again.
 
 `scripts/test-setup-assistant.php` fails if a row points at a tab that does not exist,
 if an `ask` item names a wizard step outside `_setupSteps()`, if a label is missing in
-any of the six locales, if the card starts listing configured options again, or if the
+any of the seven locales, if the card starts listing configured options again, or if the
 wizard goes back to a hardcoded closing step.
 
 ---
