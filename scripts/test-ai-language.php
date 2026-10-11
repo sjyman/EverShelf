@@ -6,7 +6,7 @@
  * Run: php scripts/test-ai-language.php
  *
  * Issue #260: gemini_identify built its prompt from a hardcoded Italian string,
- * so an English — or German, French, Spanish, Chinese — user who photographed,
+ * so an English — or German, French, Spanish, Chinese, Polish — user who photographed,
  * say, toilet paper got "Carta igienica" and an Italian description back. The
  * frontend always knew the language, the request simply never carried it. The
  * fragments now live in api/lib/ai_prompts.php, one complete set per locale, and
@@ -28,7 +28,7 @@ function assert_true(bool $cond, string $msg): void
     }
 }
 
-$locales = ['it', 'en', 'de', 'fr', 'es', 'zh'];
+$locales = ['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'];
 
 // ── Every shipped locale carries a complete fragment set ───────────────────
 $fragments = [];
@@ -54,6 +54,7 @@ foreach ($keys as $key) {
 // Unknown values fall back to English: an empty prompt would silently break the scan.
 assert_true(evershelfIdentifyPromptFragments('xx') === $fragments['en'], 'an unknown locale falls back to English');
 assert_true(evershelfIdentifyPromptFragments('') === $fragments['en'], 'an empty locale falls back to English');
+assert_true(str_contains($fragments['pl']['lang_rule'], 'po polsku'), 'Polish image-identification prompt requests Polish output');
 
 // ── Only the Italian set is Italian ────────────────────────────────────────
 $italianMarkers = ['Analizza questa foto', 'Rispondi SOLO', 'in italiano', 'Marca se visibile', 'Breve descrizione'];
@@ -98,6 +99,11 @@ function source_of(string $file, string $fn): string
 
 $indexFile = __DIR__ . '/../api/index.php';
 $index     = (string)file_get_contents($indexFile);
+assert_true(str_contains($index, "['it', 'en', 'de', 'fr', 'es', 'zh', 'pl']"), 'Polish is accepted by recipe language normalization');
+assert_true(str_contains($index, "'pl' => 'Polish'"), 'Polish is named for generated recipes');
+assert_true(str_contains($index, "'prompt_lang_rule' => 'WAŻNE: wszystkie tekstowe pola przepisu zapisuj wyłącznie po polsku.'"), 'Polish recipe prompt requests Polish output');
+$productKind = (string)file_get_contents(__DIR__ . '/../api/lib/product_kind.php');
+assert_true(str_contains($productKind, "['it', 'en', 'de', 'fr', 'es', 'zh', 'pl']"), 'Polish is accepted by product-language normalization');
 
 $handler = source_of($indexFile, 'geminiIdentifyProduct');
 assert_true($handler !== '', 'the identify handler was found');
@@ -132,6 +138,7 @@ assert_true(
 
 // ── Wiring: both frontend callers send the language ───────────────────────
 $appJs = (string)file_get_contents(__DIR__ . '/../assets/js/app.js');
+assert_true(str_contains($appJs, "pl: 'Polski'"), 'Polish is available in the language selector');
 $call  = "api('gemini_identify', {}, 'POST', { image: base64, lang: _currentLang })";
 assert_true(substr_count($appJs, $call) === 2, 'both gemini_identify callers send lang: _currentLang');
 assert_true(

@@ -93,7 +93,7 @@ EverShelf/
 │   ├── css/                    # style.css → corporate.css → elegant.css
 │   ├── js/app.js               # SPA logic (assets/js/core/ = auth, dom)
 │   └── img/
-├── translations/               # i18n JSON files (it, en, de, fr, es, zh)
+├── translations/               # i18n JSON files (it, en, de, fr, es, zh, pl)
 ├── docs/                       # openapi.yaml, code indexes, wiki sources
 ├── scripts/                    # CI test suite + maintenance CLIs
 ├── evershelf-kiosk/            # Android kiosk app (Kotlin)

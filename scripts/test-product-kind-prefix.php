@@ -294,7 +294,7 @@ $keys = [
     'card_title', 'card_hint', 'kind_prefix_label', 'auto_favorite_label',
     'auto_favorite_suffix', 'apply_existing', 'apply_confirm', 'apply_done', 'apply_failed',
 ];
-foreach (['it', 'en', 'de', 'fr', 'es', 'zh'] as $loc) {
+foreach (['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'] as $loc) {
     $data = json_decode((string)file_get_contents(__DIR__ . '/../translations/' . $loc . '.json'), true);
     $missing = [];
     foreach ($keys as $k) {

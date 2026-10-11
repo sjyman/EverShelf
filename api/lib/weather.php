@@ -83,6 +83,10 @@ function weatherLabelForBucket(string $bucket, string $lang = 'en'): string {
             'hot' => 'muy caluroso', 'warm' => 'cálido', 'mild' => 'suave', 'chilly' => 'fresco',
             'cold' => 'frío', 'rainy' => 'lluvioso', 'snowy' => 'nevado', 'foggy' => 'neblinoso', 'stormy' => 'tormentoso',
         ],
+        'pl' => [
+            'hot' => 'gorąco', 'warm' => 'ciepło', 'mild' => 'łagodnie', 'chilly' => 'chłodno',
+            'cold' => 'zimno', 'rainy' => 'deszczowo', 'snowy' => 'śnieżnie', 'foggy' => 'mgliście', 'stormy' => 'burzowo',
+        ],
     ];
     $map = $labels[$lang] ?? $labels['en'];
     return $map[$bucket] ?? $bucket;
@@ -111,6 +115,17 @@ function weatherRecipeHints(string $bucket, string $lang = 'en'): string {
             'snowy' => 'Pasti caldi e sostanziosi: stufati, pasta al forno, brodi.',
             'foggy' => 'Piatti caldi e aromatici (zuppe, spezie delicate).',
             'stormy' => 'Cibo semplice e caldo di conforto; evita grigliate outdoor.',
+        ],
+        'pl' => [
+            'hot' => 'Wybieraj zimne lub lekko gotowane dania: sałatki, gazpacho, zimny makaron lub ryż, grillowane ryby i warzywa, jogurt. Unikaj ciężkich gulaszy, długiego pieczenia i tłustych smażonych potraw.',
+            'warm' => 'Wybieraj świeże, lekkie dania, ogranicz pieczenie i dodawaj dużo warzyw oraz składników nawadniających.',
+            'mild' => 'Zbilansowane, rozgrzewające dania będą odpowiednie; pogoda nie wymaga szczególnych zmian.',
+            'chilly' => 'Wybieraj ciepłe, pożywne dania: zupy, risotto, lekkie gulasze i potrawy pieczone.',
+            'cold' => 'Stawiaj na gorące, rozgrzewające posiłki: zupy, gulasze, dania z piekarnika i sycące węglowodany. Unikaj dań opartych wyłącznie na surowych lub zimnych składnikach.',
+            'rainy' => 'Postaw na domowe, rozgrzewające jedzenie: gorące zupy, kremowe makarony i dania pieczone.',
+            'snowy' => 'Wybieraj sycące, gorące posiłki: gulasze, zapiekanki makaronowe i rozgrzewające buliony.',
+            'foggy' => 'Sprawdzą się ciepłe, aromatyczne potrawy — zupy i dania z delikatnymi przyprawami.',
+            'stormy' => 'Wybieraj proste, ciepłe dania; nie zakładaj, że można długo grillować na zewnątrz.',
         ],
     ];
     $map = $hints[$lang] ?? $hints['en'];
@@ -260,7 +275,7 @@ function weatherFuelPromptBlock(?array $weather, string $lang = 'en'): string {
     }
     $bucket = (string)($weather['bucket'] ?? 'mild');
     $label = weatherLabelForBucket($bucket, $lang);
-    $hint = weatherRecipeHints($bucket, in_array($lang, ['it', 'en'], true) ? $lang : 'en');
+    $hint = weatherRecipeHints($bucket, in_array($lang, ['it', 'en', 'pl'], true) ? $lang : 'en');
     $city = trim((string)($weather['city'] ?? ''));
     $place = $city !== '' ? $city : sprintf('lat %.2f, lon %.2f', $weather['lat'] ?? 0, $weather['lon'] ?? 0);
     $temp = $weather['temp_c'] ?? '?';

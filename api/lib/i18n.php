@@ -8,7 +8,7 @@
  * translations/<lang>.json, walk the dotted key, fall back to English, then to the
  * key itself (which stays greppable in logs/output).
  *
- * Keys resolved through evershelfTr() must exist in all six locales; scripts/i18n-audit.py
+ * Keys resolved through evershelfTr() must exist in all seven locales; scripts/i18n-audit.py
  * counts them as used (see its SRC_PHP scan).
  */
 

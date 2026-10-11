@@ -99,7 +99,7 @@ function evershelfTrimNum(float $n, int $decimals = 1): string
 
 /**
  * Human label in the natural unit of a family: "300 g", "1.5 kg", "2 pz".
- * Language-neutral on purpose — the same symbols are used in all six locales.
+ * Language-neutral on purpose — the same symbols are used in all seven locales.
  */
 function evershelfBaseLabel(float $qty, string $family): string
 {

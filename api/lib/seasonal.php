@@ -284,7 +284,7 @@ function seasonalStatusForName(string $name, ?int $month = null): string {
  *
  * The tip is a stable i18n key ('shopping.seasonal_tip_<month>') that the client
  * resolves through t(), so nothing user-visible is translated server-side and all
- * six locales get their own wording.
+ * seven locales get their own wording.
  *
  * @param list<array{name?:string,raw_name?:string}> $shoppingItems
  * @return array{month:int,tip_key:string,out_of_season:list,suggest_add:list,source:string}

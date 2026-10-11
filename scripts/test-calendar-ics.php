@@ -108,7 +108,7 @@ if ($feed['count'] > 0) {
 }
 
 // ── t() lookup used by the feed (PHP side of translations/*.json) ──────────
-foreach (['it', 'en', 'de', 'fr', 'es', 'zh'] as $loc) {
+foreach (['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'] as $loc) {
     $name = evershelfTr('ics.calendar.name', $loc);
     assert_true($name !== 'ics.calendar.name' && $name !== '', "ics.calendar.name resolved for {$loc}");
 }

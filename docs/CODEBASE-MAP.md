@@ -58,13 +58,13 @@
   `_preloaderStage(stage, state)`: grey (`is-pending`) → blinking (`is-active`) →
   coloured with an aura (`is-done`), amber/red for `is-warn`/`is-error`; the version
   chip `#preloader-version` is rewritten by `scripts/bump-version.sh`. The stages, their
-  labels and the six locales are locked together by `scripts/test-preloader-stages.php`.
+  labels and the seven locales are locked together by `scripts/test-preloader-stages.php`.
 - State held in module-level `let` vars (`shoppingItems`, `LOCATIONS`,
   `_currentLang`, `_scale*`, banner queue, …). No framework/reactivity.
 - i18n via `t(key)` + `data-i18n` attributes; `loadTranslations()` fetches
   `translations/<lang>.json`. **Never** print a literal emoji beside a translated
   label: the values already carry their icon, so use `iconLabel(icon, key)` /
-  `_stripLeadingEmoji()` (`scripts/test-i18n-icons.php` enforces it in all six locales).
+  `_stripLeadingEmoji()` (`scripts/test-i18n-icons.php` enforces it in all seven locales).
 - Dashboard: the alert blocks are capped per block (`DASHBOARD_EXPIRING_MAX` 3,
   `DASHBOARD_OPENED_MAX` 5, `DASHBOARD_ALERT_MAX` 5 for expired,
   `DASHBOARD_STALE_MAX` 3 with a deterministic 30-minute `_staleRotationPick`). The

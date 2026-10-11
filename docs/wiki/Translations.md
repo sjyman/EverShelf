@@ -54,7 +54,7 @@ Open `pt.json` in your editor and translate every **value** (leave the **keys** 
 - Keep emojis (they are part of the UX design) — and **never** print an extra icon next
   to a translated label in code: the value already carries it. Use `iconLabel(icon, key)`
   in JS / `data-i18n` in HTML; `php scripts/test-i18n-icons.php` fails on a doubled icon
-  in any of the six locales.
+  in any of the seven locales.
 - Plurals: some keys have `_one` / `_many` variants — translate both
 
 ### 3. Register the language in the app

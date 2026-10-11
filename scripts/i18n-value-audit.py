@@ -19,7 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 TRANS = ROOT / "translations"
-LOCALES = ["it", "en", "de", "fr", "es", "zh"]
+LOCALES = ["it", "en", "de", "fr", "es", "zh", "pl"]
 
 # Values that are the same in every language on purpose.
 ALLOW = {

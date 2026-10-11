@@ -16,7 +16,7 @@
  *                       stored title back through product_get, because the backend
  *                       still owns the spelling (genre prefix, capital, singular),
  *   style.css           the second tap target is styled, not an invisible hitbox,
- *   translations/*      every label the new fields print exists in all six locales.
+ *   translations/*      every label the new fields print exists in all seven locales.
  *
  * Run: php scripts/test-product-rename.php
  */
@@ -129,10 +129,10 @@ foreach (['.edit-subtitle-tap {', '.edit-subtitle-empty {', '.edit-brand-input {
     assert_true(str_contains($css, $rule), "style.css: '{$rule}' is declared");
 }
 
-// ── every label the new fields print exists in all six locales ───────────────────
+// ── every label the new fields print exists in all seven locales ──────────────────
 $keys = ['product.edit_name_brand', 'edit.label_name', 'product.brand_label',
          'product.brand_placeholder', 'product.name_required', 'toast.product_saved', 'error.save'];
-foreach (['it', 'en', 'de', 'fr', 'es', 'zh'] as $loc) {
+foreach (['it', 'en', 'de', 'fr', 'es', 'zh', 'pl'] as $loc) {
     foreach ($keys as $key) {
         assert_true(i18n_has($loc, $key), "{$loc}: '{$key}' is translated");
     }
