@@ -166,6 +166,22 @@ function aiGeminiPayloadToOpenAiMessages(array $payload): array {
     return $messages;
 }
 
+function aiOpenAiTokenLimitFallback(string $param, string $message): ?string {
+    if (stripos($message, 'unsupported parameter') === false || stripos($message, $param) === false) {
+        return null;
+    }
+    return match ($param) {
+        'max_tokens' => 'max_completion_tokens',
+        'max_completion_tokens' => 'max_tokens',
+        default => null,
+    };
+}
+
+function aiOpenAiRequiresDefaultTemperature(string $message): bool {
+    return stripos($message, 'temperature') !== false
+        && stripos($message, 'only the default (1) value is supported') !== false;
+}
+
 function aiOpenAiChatCompletions(array $geminiPayload, int $timeout = 60): array {
     $base = aiOpenAiBaseUrl();
     if ($base === '') {
@@ -184,8 +200,10 @@ function aiOpenAiChatCompletions(array $geminiPayload, int $timeout = 60): array
         'messages' => $messages,
         'temperature' => isset($gen['temperature']) ? (float)$gen['temperature'] : 0.7,
     ];
+    $tokenLimitParam = null;
     if (!empty($gen['maxOutputTokens'])) {
-        $body['max_tokens'] = (int)$gen['maxOutputTokens'];
+        $tokenLimitParam = aiProvider() === 'openai' ? 'max_completion_tokens' : 'max_tokens';
+        $body[$tokenLimitParam] = (int)$gen['maxOutputTokens'];
     }
 
     $url = $base . '/chat/completions';
@@ -196,26 +214,48 @@ function aiOpenAiChatCompletions(array $geminiPayload, int $timeout = 60): array
     }
 
     $t0 = microtime(true);
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => json_encode($body),
-        CURLOPT_HTTPHEADER => $headers,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT => $timeout,
-    ]);
-    $raw = curl_exec($ch);
-    $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $err = curl_error($ch);
-    curl_close($ch);
+    $tokenFallbackUsed = false;
+    $temperatureFallbackUsed = false;
+    do {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => json_encode($body),
+            CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => $timeout,
+        ]);
+        $raw = curl_exec($ch);
+        $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $err = curl_error($ch);
+        curl_close($ch);
+
+        if ($raw === false) {
+            $raw = json_encode(['error' => ['message' => $err ?: 'curl_failed']]);
+            $code = $code ?: 500;
+        }
+        $data = json_decode($raw, true);
+        $errorMessage = is_array($data) ? (string)($data['error']['message'] ?? '') : '';
+        $fallbackParam = !$tokenFallbackUsed && $tokenLimitParam !== null && $code !== 200 && is_array($data)
+            ? aiOpenAiTokenLimitFallback($tokenLimitParam, $errorMessage)
+            : null;
+        $retry = false;
+        if ($fallbackParam !== null) {
+            unset($body[$tokenLimitParam]);
+            $body[$fallbackParam] = (int)$gen['maxOutputTokens'];
+            $tokenLimitParam = $fallbackParam;
+            $tokenFallbackUsed = true;
+            $retry = true;
+        } elseif (!$temperatureFallbackUsed && $code !== 200 && (float)$body['temperature'] !== 1.0
+            && aiOpenAiRequiresDefaultTemperature($errorMessage)) {
+            $body['temperature'] = 1;
+            $temperatureFallbackUsed = true;
+            $retry = true;
+        }
+    } while ($retry);
 
     $elapsed = microtime(true) - $t0;
     $label = aiProvider();
-    if ($raw === false) {
-        $raw = json_encode(['error' => ['message' => $err ?: 'curl_failed']]);
-        $code = $code ?: 500;
-    }
-    $data = json_decode($raw, true);
     if ($code === 200) {
         EverLog::aiResponse($label, strlen($raw), $elapsed, true);
     } else {
